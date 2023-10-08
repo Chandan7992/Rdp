@@ -1,0 +1,26 @@
+# Install the required dependencies
+pip install freerdp
+pip install ngrok
+
+# Create a new Ngrok tunnel
+ngrok tcp 3389
+
+# Get the public IP address of the Ngrok tunnel
+public_ip=$(curl -s http://ipinfo.io/ip)
+
+# Create a new Windows 10 RDP file
+rdp_file=$(cat <<EOF
+rdp_host=$public_ip
+rdp_port=3389
+rdp_username=username
+rdp_password=password
+EOF
+)
+
+# Save the RDP file
+echo "$rdp_file" > rdp.rdp
+
+# Upload the RDP file to GitHub
+git add rdp.rdp
+git commit -m "Add RDP file"
+git push
